@@ -1,0 +1,102 @@
+        -- Android.Java--
+__WGS84 To Cassini__               
+
+Eng.Yousef Salem Alassyat
+assyat2@gmail.com
+0795065496
+--------------------------------------------------------------       
+***********
+--- الحقوق غير محفوظة ويجوز استعمال هذا الملف و التعديل و النسخ و اللصق علية ---
+
+--------------------------------------------------------------
+
+
+               double a1;
+                double a2;
+                double a3;
+                double a4;
+                double a5;
+                double a6;
+                double a7;
+                double a8;
+                double a9;
+
+                double a10;
+                double a11;
+                double a12;
+                double a13;
+                double A;
+                double T;
+                double C;
+                double V;
+                double M;
+                double M0;
+                double b0;
+                double S;
+                double a101;
+
+                double x;
+                double y;
+                double z;
+
+                double x1;
+                double y1;
+                double z1;
+
+
+                double lu;
+                double lo;
+
+                double Ea;
+                double No;
+
+
+                lu = No8;
+                lo = Ea8;
+
+
+                a101 = 31.7340969444444;
+
+
+                x = 6378137 * Math.cos(lu * 0.0174532925) * Math.cos(lo * 0.0174532925);
+                y = 6378137 * Math.cos(lu * 0.0174532925) * Math.sin(lo * 0.0174532925);
+                z = (6378137 * 0.99330562) * Math.sin(lu * 0.0174532925);
+
+                a1 = (1.00001278) * x;
+                a2 = (1.00001278) * y;
+                a3 = (1.00001278) * z;
+
+                a4 = (1 * a1 + (-0.00005731) * a2 + (0.00002143) * a3);
+                a5 = ((0.00005731) * a1 + 1 * a2 + (-0.00003879) * a3);
+                a6 = ((-0.00002143) * a1 + (0.00003879) * a2 + 1 * a3);
+
+                a7 = (a4 + (275.722));
+                a8 = (a5 + (-94.7824));
+                a9 = (a6 + (-340.894));
+
+                a10 = (Math.atan((a9 / Math.pow((Math.pow((a7), 2) + Math.pow((a8), 2)), (0.5))) / (1 - Math.pow((0.082483215), 2)))) / 0.01745329252;
+
+                a11 = (Math.atan(a8 / a7)) / 0.01745329252;
+
+
+                A = ((a11 * 0.0174532925) - (35.2120805555555 * 0.0174532925)) * Math.cos(a10 * 0.0174532925);
+                T = Math.pow(Math.tan(a10 * 0.0174532925), 2);
+                C = (0.006803481 * Math.pow(Math.cos(a10 * 0.0174532925), 2)) / (1 - 0.006803481);
+                V = 6378300.789 / Math.pow((1 - 0.006803481 * Math.pow(Math.sin(a10 * 0.0174532925), 2)), 0.5);
+                M = 6378300.789 * (1 - 0.006803481) * 1.005135373 * (a10 * 0.0174532925) + 6378300.789 * (1 - 0.006803481) * (-0.002573165) * Math.sin(2 * a10 * 0.0174532925) + 6378300.789 * (1 - 0.006803481) * 0.00000274473 * Math.sin(4 * a10 * 0.0174532925) + 6378300.789 * (1 - 0.006803481) * -0.0000000036434 * Math.sin(6 * a10 * 0.0174532925);
+                S = 6378300.789 * (1 - 0.006803481) * 1.005135373 * Math.sin(a10 * 0.0174532925);
+                M0 = 6378300.789 * (1 - 0.006803481) * 1.005135373 * (a101 * 0.0174532925) + 6378300.789 * (1 - 0.006803481) * (-0.002573165) * Math.sin(2 * a101 * 0.0174532925) + 6378300.789 * (1 - 0.006803481) * 0.00000274473 * Math.sin(4 * a101 * 0.0174532925) + 6378300.789 * (1 - 0.006803481) * -0.0000000036434 * Math.sin(6 * a101 * 0.0174532925);
+                Ea = 170251.555 + V * (A - T * Math.pow(A, 3) / 6 - (8 - T + 8 * C) * T * Math.pow(A, 5) / 120);
+                No = 1126867.909 + M - M0 + V * Math.tan(a10 * 0.0174532925) * (Math.pow(A, 2) / 2 + (5 - T + 6 * C) * Math.pow(A, 4) / 24);
+
+                LatLng location;
+                location = new LatLng(No8, Ea8);
+
+                Marker melbourne = mMap.addMarker(new MarkerOptions()
+                        .position(location)
+                        .title("N: "+No+ ","+"E: "+Ea));
+                melbourne.showInfoWindow();
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14));
+                tv2.setText(String.format("Northing : %.3f", No));
+                tv3.setText(String.format("Easting : %.3f", Ea));
+                tv4.setText("تم التحويل الى Cassini");

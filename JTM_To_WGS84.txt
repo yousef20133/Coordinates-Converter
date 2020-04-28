@@ -1,0 +1,115 @@
+     -- Android.Java--
+__JTM To WGS84__               
+
+Eng.Yousef Salem Alassyat
+assyat2@gmail.com
+0795065496
+-------------------------------------------------------------- 
+***********
+--- الحقوق غير محفوظة ويجوز استعمال هذا الملف و التعديل و النسخ و اللصق علية ---
+
+--------------------------------------------------------------
+            double a11;
+            double a21;
+            double a31;
+            double a41;
+            double a51;
+            double a61;
+            double a71;
+            double a81;
+            double a91;
+            double a101;
+            double a111;
+            double a121;
+            double a131;
+            double O1;
+            double M11;
+            double T11;
+            double D1;
+            double v11;
+            double p11;
+            double e11;
+            double u11;
+            double M01;
+            double a1011;
+
+            double x1;
+            double y1;
+            double z1;
+            double x11;
+            double y11;
+            double z11;
+
+            double lu1;
+            double lo1;
+            double lat1;
+            double lon1;
+            double e31;
+            double e=0.00672267;
+            double e3=6378388.0;
+            double No1 = N11;
+            double Ea1 = E11;
+            a1011 = 0;
+            double v21;
+            double P21;
+            double e21;
+            double u21;
+            double M21;
+            double c221;
+            double e44;
+            double D21;
+
+
+
+
+
+            M01 = e3 * (1 -e) * 1.005073989 * (a1011 * 0.0174532925) + e3 * (1 - e) * (-0.002542343) * Math.sin(2 * a1011 * 0.0174532925) + e3 * (1 - e) * 2.67953E-06 * Math.sin(4 * a1011 * 0.0174532925) +e3 * (1 - e) * -3.51447E-09 * Math.sin(6 * a1011 * 0.0174532925)+e3 * (1 - e)*4.99946E-12 * Math.sin(8 * a1011 * 0.0174532925)+e3 * (1 - e)*(-7.25993E-15) * Math.sin(10* a1011 * 0.0174532925);
+            M11 = M01 + (No1 - (-3000000.0))/0.9998;
+            u11 = M11 / (e3 * (1 - e) * 1.005073989);
+            e11 = (1 - Math.pow((1 - e), 0.5)) / (1 + Math.pow((1 - e), 0.5));
+
+            O1 = u11 + (3 * e11 / 2 - 27 * Math.pow(e11, 3) / 32) * Math.sin(2 * u11) + (21 * Math.pow(e11, 2) / 16 - 55 * Math.pow(e11, 4) / 32) * Math.sin(4 * u11) + (151 * Math.pow(e11, 3) / 96) * Math.sin(6 * u11) + (1097 * Math.pow(e11, 4) / 512) * Math.sin(8 * u11);
+            v11 = e3 / Math.pow((1 - e * Math.pow(Math.sin(O1), 2)), 0.5);
+            c221 = 0.006850085 * Math.pow(Math.cos(O1),2);
+
+            p11 = e3 * (1 - e) / Math.pow((1 - e * Math.pow(Math.sin(O1), 2)), 1.5);
+            T11 = Math.pow(Math.tan(O1), 2);
+            D1 = (Ea1 - 500000.0) / (v11*0.9998);
+            lu1 = (O1 - (v11 * Math.tan(O1) / p11) * (Math.pow(D1, 2)/2-(5+3*T11+10*c221-4*Math.pow(c221,2)-9*0.006850085 )*Math.pow(D1,4)/24+(61+90*T11+298*c221+45*Math.pow(T11,2)-252*0.006850085-3*Math.pow(c221,2))*Math.pow(D1,6)/720))/ 0.01745329252;
+
+            lo1 =  (37.0 * 0.0174532925 + (D1 -(1+2*T11+c221)*Math.pow(D1,3)/6+(5-2*c221+28*T11-3*Math.pow(c221,2)+8*0.006850085+24*Math.pow(T11,2))*Math.pow(D1,5)/120)/Math.cos(O1))/ 0.01745329252;
+
+
+            x1 = 6378388 * Math.cos(lu1 * 0.0174532925) * Math.cos(lo1 * 0.0174532925);
+            y1 = 6378388 * Math.cos(lu1 * 0.0174532925) * Math.sin(lo1 * 0.0174532925);
+            z1 = (6378388 * 0.99327733) * Math.sin(lu1 * 0.0174532925);
+
+            a11 = 1 * x1;
+            a21 = 1 * y1;
+            a31 = 1 * z1;
+
+            a41 = a11;
+            a51 = a21;
+            a61 = a31;
+
+            a71 = a41 + (-86);
+            a81 = a51 + (-98);
+            a91 = a61 + (-119);
+
+            a101 = (Math.atan((a91 / Math.pow((Math.pow(a71, 2) + Math.pow(a81, 2)), (0.5))) / (1 - Math.pow((0.081819191), 2)))) / 0.01745329252;
+
+            a111 = (Math.atan(a81 / a71)) / 0.01745329252;
+
+                LatLng location;
+                tv2.setText("Latitude: " + a101);
+
+                tv3.setText("Longitude: " + a111);
+                tv4.setText("تم التحويل الى WGS_84");
+                location = new LatLng(a101, a111);
+
+                Marker melbourne = mMap.addMarker(new MarkerOptions()
+                        .position(location)
+                        .title("Lat: "+a101 + " Lng: " + a111));
+                melbourne.showInfoWindow();
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14));
